@@ -1,0 +1,11 @@
+#login{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    mat-form-field{
+        margin: 20px;
+    }
+    p{
+        color: red;
+    }
+}

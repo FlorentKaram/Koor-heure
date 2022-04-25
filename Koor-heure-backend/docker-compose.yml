@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+  dev:
+    container_name: server-dev
+    image: server-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+      - 3000:3000
+    networks:
+      - quiz-traefik-dev
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    environment:
+      MONGO_URL: mongodb
+      
+  mongodb:
+    image: mongo:5.0.0
+    container_name: server-mongodb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pass12345
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - quiz-traefik-dev
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+
+
+volumes:
+  mongodb-data:
+    name: mongodb-data
+networks:
+  quiz-traefik-dev:
+    external : false

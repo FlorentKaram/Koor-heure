@@ -1,0 +1,24 @@
+<div id="userListPage">
+    <h2>User list</h2>
+    <div id="userList">
+        <div class="user" *ngFor="let user of userList">
+            <p>name : {{user.name}}</p>
+            <p>email : {{user.email}}</p>
+            <p>admin : {{user.admin}}</p>
+            <div class="icons">
+                <button color="primary" mat-button (click)="update(user)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button color="primary" mat-button (click)="see(user)">
+                    <mat-icon>visibility</mat-icon>
+                </button>
+                <button color="primary" mat-button (click)="remove(user)">
+                    <mat-icon color="warn">delete</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+    <button (click)="openUserDialog()" color="primary" mat-button>
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
