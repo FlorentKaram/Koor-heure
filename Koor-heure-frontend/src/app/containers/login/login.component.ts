@@ -38,6 +38,10 @@ export class LoginComponent implements OnInit {
     }
 
     this.authService.login(this.email.value, this.password.value).subscribe((response) => {
+      if(!JSON.parse(JSON.stringify(response)).user.admin){
+        alert('You are not admin');
+        return
+      }
       if (localStorage.getItem('access_token')) {
         localStorage.removeItem('access_token');
       }
