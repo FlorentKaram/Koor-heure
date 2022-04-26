@@ -15,7 +15,6 @@ export class UserForm{
             email:  [user.email,Validators.required],
             password:  [user.password,Validators.required],
             admin:  [user.admin, Validators.required],
-            lastRun :  this.createRunForm(user.lastRun!),
             runs: this.createRunsFormArray(user.runs!)
         })
     }

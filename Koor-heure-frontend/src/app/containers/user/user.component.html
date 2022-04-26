@@ -1,0 +1,14 @@
+<button mat-raised-button color="primary" routerLink="/admin">return</button>
+<div id="user" *ngIf="user">
+    <h2>name : {{user.name}}</h2>
+    <p>email : {{user.email}}</p>
+    <p>admin : {{user.admin}}</p>
+    <div class="runs">
+        <div *ngFor="let run of user.runs;  let i = index">
+            <h3>Run : {{i + 1}}</h3>
+            <p>Date : {{run.date}}</p>
+            <p>Duration : {{run.duration}}</p>
+            <p>Speed : {{run.speed}}</p>
+        </div>
+    </div>
+</div>

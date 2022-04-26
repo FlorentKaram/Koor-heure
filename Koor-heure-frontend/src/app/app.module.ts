@@ -18,13 +18,16 @@ import {MatIconModule} from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { UserDialogComponent } from './dialogs/user-dialog/user-dialog.component';
 import { UserForm } from './forms/user.form';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { UserComponent } from './containers/user/user.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     AdminComponent,
-    UserDialogComponent
+    UserDialogComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +40,8 @@ import { UserForm } from './forms/user.form';
     HttpClientModule,
     ReactiveFormsModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSlideToggleModule
   ],
   providers: [
     AuthService, 

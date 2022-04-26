@@ -1,0 +1,12 @@
+#createUser{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    mat-form-field{
+        width: 80%;
+    }
+    p{
+        color: red;
+        margin-top: 20px;
+    }
+}

@@ -25,6 +25,12 @@ export class UsersService {
     userToReturn.password = null;
     return userToReturn;
   }
+  async findOneByEMailAdmin(admin : string, email : string){
+    await this.isAdmin(admin);
+    let userToReturn = await this.getUser(email);
+    userToReturn.password = null;
+    return userToReturn;
+  }
 
   // create
   async createRootUser() {
@@ -49,8 +55,8 @@ export class UsersService {
       newUser.admin = false;
     }
     const result = await newUser.save();
-
-    return result.id;
+    result.password = null
+    return result;
   }
 
   async createAdmin(creator: String, user: User) {
@@ -66,13 +72,29 @@ export class UsersService {
 
   // Update
   async update(email: string, user: User) {
-    if (email != user.email) {
-      await this.isUserExist(email);
+    if(user && email != user.email){
+      await this.isUserExist(user.email);
     }
-    this.isUserExist(email);
-
-    user.password = await bcrypt.hash(user.password, this.saltOrRounds);
+    console.log(user);
+    if(user.password){
+      user.password = await bcrypt.hash(user.password, this.saltOrRounds);
+    }
     return this.userModel.findOneAndUpdate({ email: email }, user);
+  }
+  async updateAdmin(admin : string, emailToUpdate : string, user : User){
+    await this.isAdmin(admin);
+
+    if(user.password){
+      user.password = await bcrypt.hash(user.password, this.saltOrRounds);
+    }
+    let check = await this.userModel.exists({email : emailToUpdate});
+    if(!check){      
+      throw new NotFoundException('User not found');
+    }
+    if(user.email){
+      await this.isUserExist(user.email);
+    }
+    return this.userModel.findOneAndUpdate({ email: emailToUpdate }, user);
   }
 
   //delete
@@ -87,16 +109,18 @@ export class UsersService {
     return deletedUser;
   }
 
-  async removeAdmin(adminUser, userToDelete) {
+  async removeAdmin(adminUser : string, userEmailToDelete : string) {
     await this.isAdmin(adminUser);
 
     let numberOfUser = await this.userModel.count({ admin: true });
-    if (numberOfUser == 1 && userToDelete.admin == true) {
+    let userToDelete = await this.userModel.findOne({ email: userEmailToDelete });
+
+    if (numberOfUser == 1 && userToDelete.admin) {
       throw new HttpException('You can\'t delete this user (last admin user)', HttpStatus.UNAUTHORIZED);
     }
-
-    let deletedUser = await this.userModel.findOneAndDelete({ email: userToDelete });
+    let deletedUser = await this.userModel.findOneAndDelete({ email: userEmailToDelete });
     deletedUser.password = null;
+    
     return deletedUser;
   }
 
@@ -106,7 +130,6 @@ export class UsersService {
     const userCreator = await this.userModel.findOne({ email: email });
     if (userCreator.admin == false) {
       throw new HttpException('You can\'t use this rout if you\'r not admin ', HttpStatus.UNAUTHORIZED);
-      return true;
     }
   }
 

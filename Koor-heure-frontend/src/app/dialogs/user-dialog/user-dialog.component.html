@@ -1,7 +1,64 @@
-<form [formGroup]="newUser" id="createUser" >
+<form *ngIf="!updateUser" [formGroup]="newUser" id="createUser">
     <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
         <input matInput formControlName="name" type="text">
+        <mat-error [@errorNewsletterAnimation]="errorNewsletterAnimation"
+            (@errorNewsletterAnimation.done)="setBackToValid()" *ngIf="newUser.get('name')!.hasError('required')">
+            Name is <strong>required</strong>
+        </mat-error>
     </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>email</mat-label>
+        <input matInput formControlName="email" type="text">
+        <mat-error [@errorNewsletterAnimation]="errorNewsletterAnimation"
+            (@errorNewsletterAnimation.done)="setBackToValid()" *ngIf="newUser.get('email')!.hasError('required')">
+            Email is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>password</mat-label>
+        <input (change)="checkEquality()" matInput formControlName="password" type="password">
+        <mat-error [@errorNewsletterAnimation]="errorNewsletterAnimation"
+            (@errorNewsletterAnimation.done)="setBackToValid()" *ngIf="newUser.get('password')!.hasError('required')">
+            password is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Comfirm password</mat-label>
+        <input matInput (change)="checkEquality()" [formControl]="confirmPassword" type="password">
+        <mat-error [@errorNewsletterAnimation]="errorNewsletterAnimation"
+            (@errorNewsletterAnimation.done)="setBackToValid()" *ngIf="confirmPassword.hasError('required')">
+            confirm password is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-slide-toggle color="primary" formControlName="admin">admin</mat-slide-toggle>
+    <button (click)="validDialog()" [style.margin-top.px]="20" mat-stroked-button color="primary">create user</button>
+    <p *ngIf="!equalityPass" [@errorNewsletterAnimation]="errorNewsletterAnimation"
+        (@errorNewsletterAnimation.done)="setBackToValid()">password are not equal</p>
+    <p *ngIf="emailAlreadyUse" [@errorNewsletterAnimation]="errorNewsletterAnimation"
+        (@errorNewsletterAnimation.done)="setBackToValid()">Email already use</p>
 </form>
-sdfsdf
+
+
+<form *ngIf="updateUser" [formGroup]="newUser" id="createUser">
+    <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" type="text">
+        <mat-error [@errorNewsletterAnimation]="errorNewsletterAnimation"
+            (@errorNewsletterAnimation.done)="setBackToValid()" *ngIf="newUser.get('name')!.hasError('required')">
+            Name is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>email</mat-label>
+        <input matInput formControlName="email" type="text">
+        <mat-error [@errorNewsletterAnimation]="errorNewsletterAnimation"
+            (@errorNewsletterAnimation.done)="setBackToValid()" *ngIf="newUser.get('email')!.hasError('required')">
+            Email is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-slide-toggle color="primary" formControlName="admin">admin</mat-slide-toggle>
+    <p *ngIf="emailAlreadyUse" [@errorNewsletterAnimation]="errorNewsletterAnimation"
+        (@errorNewsletterAnimation.done)="setBackToValid()">Email already use</p>
+    <button (click)="patchUser()" [style.margin-top.px]="20" mat-stroked-button color="primary">create user</button>
+</form>
