@@ -18,7 +18,17 @@ export class UsersService {
     });
     return listUser;
   }
-
+  async getBestUser(){
+    const listUser =  await this.userModel.find();
+    let maxUser = listUser[0];
+    listUser.forEach(user => {
+      if(user.lastRun && maxUser.lastRun.distance < user.lastRun.distance){
+        maxUser = user;
+      }
+    });
+    maxUser.password = null;
+    return maxUser;
+  }
 
   async findOneByEMail(email: string) {
     let userToReturn = await this.getUser(email);
@@ -72,10 +82,9 @@ export class UsersService {
 
   // Update
   async update(email: string, user: User) {
-    if(user && email != user.email){
+    if(user && email != user.email){      
       await this.isUserExist(user.email);
     }
-    console.log(user);
     if(user.password){
       user.password = await bcrypt.hash(user.password, this.saltOrRounds);
     }
@@ -135,6 +144,7 @@ export class UsersService {
 
   async isUserExist(email: String) {
     const userExist = await this.userModel.findOne({ email: email });
+    console.log(userExist)
     if (userExist) {
       throw new HttpException('Email already exist', HttpStatus.FORBIDDEN);
     }

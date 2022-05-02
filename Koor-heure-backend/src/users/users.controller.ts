@@ -3,7 +3,7 @@ import { User } from './user.model';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { request } from 'http';
+import { get, request } from 'http';
 
 @Controller('user')
 export class UsersController {
@@ -14,6 +14,11 @@ export class UsersController {
   @ApiBearerAuth('acces-token')
   findByEMail (@Request() req){
     return this.usersService.findOneByEMail(req.user.email);
+  }
+
+  @Get('bestUser')
+  userOftheMonth(){
+    return this.usersService.getBestUser();
   }
 
   @Post('')
