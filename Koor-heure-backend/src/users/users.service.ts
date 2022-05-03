@@ -48,7 +48,7 @@ export class UsersService {
 
     for (let index = 0; index < checkUser.length; index++) {
       if(checkUser[index].admin){
-        console.log("Root user already exist");
+        console.log("Admin user already exist");
         return;
       }
     }
