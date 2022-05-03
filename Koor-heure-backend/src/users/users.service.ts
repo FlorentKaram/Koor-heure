@@ -44,6 +44,14 @@ export class UsersService {
 
   // create
   async createRootUser() {
+    let checkUser = await this.userModel.find();
+
+    for (let index = 0; index < checkUser.length; index++) {
+      if(checkUser[index].admin){
+        console.log("Root user already exist");
+        return;
+      }
+    }
     let password = await bcrypt.hash(process.env.ROOT_PASSWORD, this.saltOrRounds);
 
     this.userModel.create({
@@ -51,8 +59,7 @@ export class UsersService {
       email: process.env.ROOT_EMAIL,
       password: password,
       admin: true
-    }).then(() => console.log("Root user has been created"))
-      .catch(() => console.log("Root user already existe"));
+    }).then(() => console.log("Root user has been created"));
   }
 
 
@@ -120,6 +127,9 @@ export class UsersService {
 
   async removeAdmin(adminUser : string, userEmailToDelete : string) {
     await this.isAdmin(adminUser);
+    if(adminUser == userEmailToDelete){
+      throw new HttpException('You can\'t delete your own account',HttpStatus.CONFLICT);
+    }
 
     let numberOfUser = await this.userModel.count({ admin: true });
     let userToDelete = await this.userModel.findOne({ email: userEmailToDelete });

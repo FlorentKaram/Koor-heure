@@ -3,6 +3,9 @@
     flex-direction: column;
     align-items: center;
     #userList {
+        box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+        margin: 10px;
+        padding: 30px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -16,16 +19,14 @@
             flex-direction: column;
             align-items: center;
 
-            border: 5px solid;
-            border-image: black;
-            border-image-slice: 1;
+            box-shadow: rgba(41, 8, 227, 0.24) 0px 3px 8px;
             border-radius: 10px;
             margin: 10px;
             padding: 15px;
             width: 300px;
         }
     }
-    mat-icon{
+    mat-icon {
         transform: scale(1.3);
     }
 }

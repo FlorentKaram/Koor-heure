@@ -51,7 +51,7 @@ export class AdminComponent implements OnInit {
     this.userService.deleteUser(user.email!).subscribe(() => {
       this.getUsers();
     }, (error) => { 
-      alert('You can`t delete the last admin');
+      alert('You can`t delete yourself');
     })
   }
 }
