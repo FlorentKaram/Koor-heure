@@ -41,9 +41,6 @@ export class User {
   @ApiProperty()
   admin: boolean;
 
-  @ApiProperty()
-  lastRun: Run;
-
   @ApiProperty({ type: [Run] })
   runs: Run[];
 
@@ -69,7 +66,6 @@ export const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   admin: {type: Boolean, required: true},
-  lastRun: RunShema,
   runs: [RunShema]
 });
 
