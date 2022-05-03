@@ -22,7 +22,7 @@ export class UsersService {
     const listUser =  await this.userModel.find();
     let maxUser = listUser[0];
     listUser.forEach(user => {
-      if(user.runs[0] && maxUser.runs[0].distance && user.runs[0].distance && maxUser.runs[0].distance < user.runs[0].distance){
+      if(user.runs[0] && maxUser.runs[0] && maxUser.runs[0].distance && user.runs[0].distance && maxUser.runs[0].distance < user.runs[0].distance){
         maxUser = user;
       }
     });
