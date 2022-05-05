@@ -8,7 +8,8 @@
             <h3>Run : {{i + 1}}</h3>
             <p>Date : {{run.date}}</p>
             <p>Duration : {{run.duration}}</p>
-            <p>Speed : {{run.speed}}</p>
+            <p>Distance : {{run.distance}} m</p>
+            <p *ngIf="run.speed !== 'none'">Speed : {{run.speed}</p>
         </div>
     </div>
 </div>
