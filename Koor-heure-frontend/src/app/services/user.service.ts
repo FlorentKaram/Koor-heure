@@ -11,6 +11,7 @@ export class UserService {
     getUsers(){
         return this.http.get(this.baseUrl);
     }
+    
     getUser(email : string){
         return this.http.get(this.baseUrl + '/' + email);
     }
@@ -18,6 +19,7 @@ export class UserService {
     patchUser(email: string, user: UserModel){
         return this.http.patch(this.baseUrl + '/'+ email,user);
     }
+
     createUser(user: UserModel) {
         return this.http.post(this.baseUrl, user);
     }

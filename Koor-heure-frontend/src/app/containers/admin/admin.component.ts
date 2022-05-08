@@ -6,7 +6,7 @@ import { UserDialogComponent } from 'src/app/dialogs/user-dialog/user-dialog.com
 import { UserForm } from 'src/app/forms/user.form';
 import { UserModel } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
-
+import jwtDecode from 'jwt-decode'
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -28,9 +28,15 @@ export class AdminComponent implements OnInit {
     dialogConfig.data = this.userForm.createUserForm(user);;
     let dialogRef = this.dialogUser.open(UserDialogComponent,dialogConfig);
     dialogRef.afterClosed().subscribe((result) => {
+      let token = localStorage.getItem('access_token');
+      if (token && JSON.parse(JSON.stringify(jwtDecode(token))).name == user.name) {
+        localStorage.removeItem('access_token');
+        this.router.navigate(['/']);
+      }
       this.getUsers();
     })
   }
+  
   getUsers() {
     this.userService.getUsers().subscribe((result) => {
       this.userList = JSON.parse(JSON.stringify(result));
@@ -44,9 +50,11 @@ export class AdminComponent implements OnInit {
   see(user: UserModel) {
     this.router.navigate(['/user',{email : user.email}]);
   }
+  
   add(){
     this.openUserDialog({});
   }
+
   remove(user: UserModel) {
     this.userService.deleteUser(user.email!).subscribe(() => {
       this.getUsers();

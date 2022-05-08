@@ -47,6 +47,7 @@ export class UsersService {
     userToReturn.password = null;
     return userToReturn;
   }
+
   async findOneByEMailAdmin(admin : string, email : string){
     await this.isAdmin(admin);
     let userToReturn = await this.getUser(email);
@@ -56,6 +57,8 @@ export class UsersService {
 
   // create
   async createRootUser() {
+    
+    
     let checkUser = await this.userModel.find();
 
     for (let index = 0; index < checkUser.length; index++) {
@@ -64,6 +67,7 @@ export class UsersService {
         return;
       }
     }
+    
     let password = await bcrypt.hash(process.env.ROOT_PASSWORD, this.saltOrRounds);
 
     this.userModel.create({
@@ -101,6 +105,8 @@ export class UsersService {
 
   // Update
   async update(email: string, user: User) {
+    
+    
     if(user && email != user.email){      
       await this.isUserExist(user.email);
     }
@@ -109,20 +115,26 @@ export class UsersService {
     }
     return this.userModel.findOneAndUpdate({ email: email }, user);
   }
+
   async updateAdmin(admin : string, emailToUpdate : string, user : User){
     await this.isAdmin(admin);
-
-    if(user.password){
-      user.password = await bcrypt.hash(user.password, this.saltOrRounds);
-    }
-    let check = await this.userModel.exists({email : emailToUpdate});
-    if(!check){      
+    console.log('admin bon');
+    
+    let oldUser =  await this.getUser(emailToUpdate);    
+    if(!oldUser){
       throw new NotFoundException('User not found');
     }
-    if(user.email){
+
+    console.log('olduser bon');
+    
+    if(user.email && user.email != oldUser.email){
       await this.isUserExist(user.email);
     }
+    user.password = oldUser.password;
+    console.log('is existe bon');
+    
     return this.userModel.findOneAndUpdate({ email: emailToUpdate }, user);
+
   }
 
   //delete
@@ -166,7 +178,6 @@ export class UsersService {
 
   async isUserExist(email: String) {
     const userExist = await this.userModel.findOne({ email: email });
-    console.log(userExist)
     if (userExist) {
       throw new HttpException('Email already exist', HttpStatus.FORBIDDEN);
     }
