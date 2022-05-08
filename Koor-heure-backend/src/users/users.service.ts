@@ -118,20 +118,15 @@ export class UsersService {
 
   async updateAdmin(admin : string, emailToUpdate : string, user : User){
     await this.isAdmin(admin);
-    console.log('admin bon');
-    
     let oldUser =  await this.getUser(emailToUpdate);    
     if(!oldUser){
       throw new NotFoundException('User not found');
     }
-
-    console.log('olduser bon');
     
     if(user.email && user.email != oldUser.email){
       await this.isUserExist(user.email);
     }
     user.password = oldUser.password;
-    console.log('is existe bon');
     
     return this.userModel.findOneAndUpdate({ email: emailToUpdate }, user);
 
